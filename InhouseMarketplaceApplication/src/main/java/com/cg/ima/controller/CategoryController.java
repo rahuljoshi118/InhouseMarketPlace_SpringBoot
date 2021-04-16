@@ -28,8 +28,6 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
-	
-	
 // if we want to post(insert) multiple categories	
 //		@PostMapping(path = "/category")
 //		public List<Category> addCategory(@RequestBody List<Category> categories) {

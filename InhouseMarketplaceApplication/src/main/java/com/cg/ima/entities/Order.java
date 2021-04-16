@@ -19,7 +19,6 @@ import javax.persistence.Table;
 @Table(name="orders")
 public class Order {
 
-
 	@Id
 	@Column(name = "order_id")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="order_seq")

@@ -25,8 +25,6 @@ public class Category {
 	@NotBlank(message="Category name should not be blank!")
 	private String catName;
 
-
-
 	public Category() {
 		super();
 	}

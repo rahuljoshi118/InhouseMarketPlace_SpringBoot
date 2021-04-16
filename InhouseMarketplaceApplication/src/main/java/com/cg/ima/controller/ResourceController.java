@@ -27,7 +27,6 @@ public class ResourceController {
 	@Autowired
 	private ResourceService resourceService;
 
-	
 // if we want to post(insert) multiple resources	
 //	@PostMapping(path = "/resource")
 //	public List<Resource> addResource(@RequestBody List<Resource> resources) {

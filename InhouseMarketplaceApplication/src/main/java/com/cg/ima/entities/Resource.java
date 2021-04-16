@@ -44,7 +44,6 @@ public class Resource {
 	@Column(name = "resource_date")
 	private LocalDate resDate;
 
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id")
 	private Category category;
