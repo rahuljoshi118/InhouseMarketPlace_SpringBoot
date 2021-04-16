@@ -2,7 +2,11 @@ package com.cg.ima.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,15 +42,25 @@ public class ResourceController {
 
 // if we want to post(insert) a single resource
 	@PostMapping(path = "/resource")
-	public Resource addResource(@RequestBody Resource res) {
+	public Resource addResource(@Valid @RequestBody Resource res, BindingResult bindingResult) throws Exception {
 	
+		if (bindingResult.hasErrors()) 
+		{
+			throw new Exception("Resource details are not valid");
+		}
+		
 		Resource resource = resourceService.addResource(res);		
 		return resource;
 		
 	}
 	
 	@PutMapping(path = "/resource")
-	public Resource updateResource(@RequestBody Resource res) {
+	public Resource updateResource(@Valid @RequestBody Resource res, BindingResult bindingResult) throws Exception {
+		
+		if (bindingResult.hasErrors()) 
+		{
+			throw new Exception("Resource details are not valid");
+		}
 		
 		Resource resource = resourceService.updateResource(res);
 		return resource;
@@ -54,9 +68,9 @@ public class ResourceController {
 	}
 
 	@DeleteMapping(path = "/resource/{resId}")
-	public void removeResource(@PathVariable("resId") int resId) {
+	public ResponseEntity<String> removeResource(@PathVariable("resId") int resId) throws ResourceNotFoundException {
 		
-		resourceService.removeResource(resId);
+		return resourceService.removeResource(resId);
 
 	}
 
@@ -64,45 +78,22 @@ public class ResourceController {
 	public Resource getResourceById(@PathVariable("resId") int resId) throws ResourceNotFoundException {
 	
 		Resource resource = resourceService.getResourceById(resId);
-		// Throw user defined exception
-		if (resource == null) {
-			ResourceNotFoundException resourceNotFound = new ResourceNotFoundException("Resource ID '"+ resId +"' Not Found!");
-			throw resourceNotFound;
-		}
-		else
-		{	
-			return resource;
-		}
+		return resource;
 	}
 
 //if we want all resources using like query	
-		@GetMapping(path = "/resource/category/{catId}")
-		public List<Resource> getAllResourcesByCategory(@PathVariable("catId") int catId) throws ResourceNotFoundException {
-			
-			List<Resource> resources = resourceService.getAllResourcesByCategory(catId);
-			if (resources.isEmpty()) {
-				ResourceNotFoundException resourceNotFound = new ResourceNotFoundException("Resource For Category Id '"+ catId +"' Not Found!");
-				throw resourceNotFound;
-			}
-			else
-			{	
-				return resources;
-			}
+	@GetMapping(path = "/resource/category/{catId}")
+	public List<Resource> getAllResourcesByCategory(@PathVariable("catId") int catId) throws ResourceNotFoundException {
 		
-		}
+		List<Resource> resources = resourceService.getAllResourcesByCategory(catId);
+		return resources;
+	}
 	
 	@GetMapping(path = "/resource")
 	public List<Resource> getAllResources() throws ResourceNotFoundException {
 		
 		List<Resource> resources = resourceService.getAllResources();
-		if (resources.isEmpty()) {
-			ResourceNotFoundException resourceNotFound = new ResourceNotFoundException("No Resource Found!");
-			throw resourceNotFound;
-		}
-		else
-		{	
-			return resources;
-		}
+		return resources;
 	}
 
 }

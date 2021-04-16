@@ -1,8 +1,15 @@
 package com.cg.ima.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +20,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.ima.entities.Employee;
+import com.cg.ima.entities.Order;
+import com.cg.ima.exception.EmployeeExistsException;
 import com.cg.ima.exception.EmployeeNotFoundException;
+import com.cg.ima.exception.OrderNotFoundException;
 import com.cg.ima.service.EmployeeService;
+import com.cg.ima.service.OrderService;
 
 @RestController
 @RequestMapping("/ima")
@@ -22,11 +33,13 @@ public class EmployeeController {
 	
 	@Autowired
 	private EmployeeService employeeService;
+	@Autowired
+	private OrderService orderService;
 
 	
 // if we want to post(insert) multiple employees	
 //	@PostMapping(path = "/employee")
-//	public List<Employee> addEmployee(@RequestBody List<Employee> employees) {
+//	public List<Employee> addEmployee(@Valid @RequestBody List<Employee> employees) {
 //		
 //		for(Employee e: employees)
 //		{
@@ -38,41 +51,43 @@ public class EmployeeController {
 
 // if we want to post(insert) a single employee
 	@PostMapping(path = "/employee")
-	public Employee addEmployee(@RequestBody Employee emp) {
+	public Employee addEmployee(@Valid @RequestBody Employee emp, BindingResult bindingResult) throws Exception, EmployeeExistsException {
 	
-		Employee employee = employeeService.addEmployee(emp);		
-		return employee;
+		if (bindingResult.hasErrors()) 
+		{
+			throw new Exception("Employee details are not valid");
+		}
 		
-	}
-	
-	@PutMapping(path = "/employee")
-	public Employee updateEmployee(@RequestBody Employee emp) {
-		
-		Employee employee = employeeService.updateEmployee(emp);
+		Employee employee = employeeService.addEmployee(emp);
 		return employee;
 		
 	}
 
-	@DeleteMapping(path = "/employee/{empId}")
-	public void removeEmployee(@PathVariable("empId") int empId) {
+	
+	@PutMapping(path = "/employee")
+	public Employee updateEmployee(@Valid @RequestBody Employee emp, BindingResult bindingResult) throws Exception {
 		
-		employeeService.removeEmployee(empId);
+		if (bindingResult.hasErrors()) 
+		{
+			throw new Exception("Employee details are not valid");
+		}
+		
+		Employee employee = employeeService.updateEmployee(emp);
+		return employee;
+	}
+
+	@DeleteMapping(path = "/employee/{empId}")
+	public ResponseEntity<String> removeEmployee(@PathVariable("empId") int empId) throws EmployeeNotFoundException {
+		
+		return employeeService.removeEmployee(empId);
 
 	}
 
 	@GetMapping(path = "/employee/{empId}")
-	public Employee getEmployeeById(@PathVariable("empId") int empId) throws EmployeeNotFoundException {
+	public Employee getEmployeeById(@PathVariable("empId") int empId) throws EmployeeNotFoundException{
 	
 		Employee employee = employeeService.getEmployeeById(empId);
-		// Throw user defined exception
-		if (employee == null) {
-			EmployeeNotFoundException employeeNotFound = new EmployeeNotFoundException("Employee ID '"+ empId +"' Not Found!");
-			throw employeeNotFound;
-		}
-		else
-		{	
-			return employee;
-		}
+		return employee;
 	}
 
 //if we want all employees using like query	
@@ -89,30 +104,84 @@ public class EmployeeController {
 	public Employee getEmployeeByName(@PathVariable("empName") String empName) throws EmployeeNotFoundException {
 		
 		Employee employee = employeeService.getEmployeeByName(empName);
-		// Throw user defined exception
-		if (employee == null) {
-			EmployeeNotFoundException employeeNotFound = new EmployeeNotFoundException("Employee Name '"+ empName +"' Not Found!");
-			throw employeeNotFound;
-		}
-		else
-		{	
-			return employee;
-		}
-	
+		return employee;
 	}
 
 	@GetMapping(path = "/employee")
 	public List<Employee> getAllEmployees() throws EmployeeNotFoundException {
 		
 		List<Employee> employees = employeeService.getAllEmployees();
-		if (employees.isEmpty()) {
-			EmployeeNotFoundException employeeNotFound = new EmployeeNotFoundException("No Employee Found!");
-			throw employeeNotFound;
-		}
-		else
-		{	
-			return employees;
-		}
+		return employees;
+	}
+	
+	
+	
+	
+	
+//Order Controller Start	
+	
+	@PostMapping(path = "/employee/order")
+	public Order addOrder(@RequestBody Order order) {
+	
+		Order o = orderService.addOrder(order);		
+		return o;
+		
+	}
+	
+	
+//	@PutMapping(path = "employee/order")
+//	public Order updateOrder(@RequestBody Order order) {
+//		
+//		Order o = orderService.updateOrder(order);
+//		return o;
+//		
+//	}
+	
+	@DeleteMapping(path = "/order/{orderId}")
+	public ResponseEntity<String> removeOrder(@PathVariable("orderId") int orderId) {
+		System.out.println("removeOrder controller");
+		return orderService.removeOrder(orderId);
+
+	}
+	
+	@GetMapping(path = "employee/order/{orderId}")
+	public Order getOrderById(@PathVariable("orderId") int orderId) throws OrderNotFoundException {
+	
+		Order order = orderService.getOrderById(orderId);
+		return order;
 	}
 
+//if we want all orders using like query	
+	@GetMapping(path = "employee/order/date/{orderDate}")
+	public List<Order> getAllOrdersByDate(@PathVariable("orderDate")@DateTimeFormat(iso = ISO.DATE) LocalDate orderDate) throws OrderNotFoundException {
+		
+		List<Order> orders = orderService.getAllOrdersByDate(orderDate);
+		return orders;
+	
+	}
+	
+//	@GetMapping(path = "employee/order")
+//	public List<Order> getAllOrders() throws OrderNotFoundException {
+//		
+//		List<Order> orders = orderService.getAllOrders();
+//		if (orders.isEmpty()) 
+//		{
+//			throw new OrderNotFoundException("No Order Found!");
+//		}
+//		else
+//		{	
+//			return orders;
+//		}
+//	}
+	
+	@GetMapping(path = "employee/order/empid/{empId}")
+	public List<Order> getAllOrdersByEmployeeId(@PathVariable("empId") int empId) throws OrderNotFoundException {
+		
+		List<Order> orders = orderService.getAllOrdersByEmployeeId(empId);
+		return orders;
+	}
+
+	
+	
+//Order Controller End	
 }

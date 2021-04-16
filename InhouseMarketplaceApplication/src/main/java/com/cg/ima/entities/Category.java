@@ -1,19 +1,15 @@
 package com.cg.ima.entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "category")
@@ -26,11 +22,10 @@ public class Category {
 	private int catId;
 
 	@Column(name = "category_name")
+	@NotBlank(message="Category name should not be blank!")
 	private String catName;
 
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "category")
-	private List<Resource> resources = new ArrayList<Resource>();
+
 
 	public Category() {
 		super();
@@ -40,7 +35,7 @@ public class Category {
 		super();
 		this.catId = catId;
 		this.catName = catName;
-		this.resources = resources;
+//		this.resources = resources;
 	}
 
 	public int getCatId() {
@@ -58,18 +53,18 @@ public class Category {
 	public void setCatName(String catName) {
 		this.catName = catName;
 	}
-
-	public List<Resource> getResources() {
-		return resources;
-	}
-
-	public void setResources(List<Resource> resources) {
-		this.resources = resources;
-	}
+//
+//	public List<Resource> getResources() {
+//		return resources;
+//	}
+//
+//	public void setResources(List<Resource> resources) {
+//		this.resources = resources;
+//	}
 
 	@Override
 	public String toString() {
-		return "Category [catId=" + catId + ", catName=" + catName + ", resources=" + resources + "]";
+		return "Category [catId=" + catId + ", catName=" + catName + "]";
 	}
 	
 

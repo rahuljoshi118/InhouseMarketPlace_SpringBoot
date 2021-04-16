@@ -13,7 +13,10 @@ import com.cg.ima.entities.Order;
 @Repository
 public interface IOrderRepository extends JpaRepository<Order, Integer> {
 	
-	@Query("from Order where order_date like %:orderDate%") // JPQL -> table name=Entity class
+	@Query("from Order where order_date = :orderDate") // JPQL -> table name=Entity class
 	List<Order> findByDate(@Param("orderDate") LocalDate orderDate);
+	
+	@Query("from Order where employee_id = :empId") // JPQL -> table name=Entity class
+	List<Order>	getAllOrdersByEmployeeId(@Param("empId") int empId);
 
 }

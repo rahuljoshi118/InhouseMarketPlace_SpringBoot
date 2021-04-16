@@ -15,5 +15,9 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Integer> {
 	@Query("from Employee where employee_name like %:empName%") // JPQL -> table name=Entity class
 //	List<Employee> findByName(@Param("empName") String empName);
 	Optional<Employee> findByName(@Param("empName") String empName);
+	
+	
+	@Query("from Employee where email = :empEmail")
+	Employee findByEmployeeEmail(@Param("empEmail") String empEmail);
 
 }

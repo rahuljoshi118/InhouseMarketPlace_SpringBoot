@@ -12,7 +12,7 @@ import com.cg.ima.entities.Resource;
 @Repository
 public interface IResourceRepository extends JpaRepository<Resource, Integer> {
 	
-	@Query("from Resource where category_id like %:catId%") // JPQL -> table name=Entity class
+	@Query("from Resource where category_id = :catId") // JPQL -> table name=Entity class
 	List<Resource> findByCategory(@Param("catId") int catId);
 
 }

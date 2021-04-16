@@ -1,9 +1,9 @@
 package com.cg.ima.entities;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,26 +31,28 @@ public class Resource {
 	private int resId;
 
 	@Column(name = "resource_title")
+	@NotBlank(message="Resource title should not be blank!")
 	private String resTitle;
 	
 	@Column(name = "resource_description")
 	private String resDescription;
 
 	@Column(name = "resource_price")
+	@Digits(integer=6, fraction=2)
 	private double resPrice;
 
 	@Column(name = "resource_date")
 	private LocalDate resDate;
 
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id")
 	private Category category;
 
 
 	@JsonIgnore
-	@ManyToMany(fetch=FetchType.LAZY,mappedBy="resources")
-	private List<Order> orders = new ArrayList<Order>();
+	@ManyToMany(fetch=FetchType.LAZY,cascade = CascadeType.ALL, mappedBy = "resources")
+	private List<Order> orders;
 
 
 	public Resource() {

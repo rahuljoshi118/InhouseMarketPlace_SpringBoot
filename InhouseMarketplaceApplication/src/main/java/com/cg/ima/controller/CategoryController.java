@@ -2,7 +2,11 @@ package com.cg.ima.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.ima.entities.Category;
+import com.cg.ima.exception.CategoryExistsException;
 import com.cg.ima.exception.CategoryNotFoundException;
 import com.cg.ima.service.CategoryService;
 
@@ -23,6 +28,8 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
+	
+	
 // if we want to post(insert) multiple categories	
 //		@PostMapping(path = "/category")
 //		public List<Category> addCategory(@RequestBody List<Category> categories) {
@@ -37,15 +44,25 @@ public class CategoryController {
 
 // if we want to post(insert) a single category
 	@PostMapping(path = "/category")
-	public Category addCategory(@RequestBody Category category) {
+	public Category addCategory(@Valid @RequestBody Category category, BindingResult bindingResult) throws Exception, CategoryExistsException {
 	
+		if (bindingResult.hasErrors()) 
+		{
+			throw new Exception("Category details are not valid");
+		}
+		
 		Category c = categoryService.addCategory(category);		
 		return c;
 		
 	}
 	
 	@PutMapping(path = "/category")
-	public Category updateCategory(@RequestBody Category category) {
+	public Category updateCategory(@Valid @RequestBody Category category, BindingResult bindingResult) throws Exception {
+		
+		if (bindingResult.hasErrors()) 
+		{
+			throw new Exception("Category details are not valid");
+		}
 		
 		Category c = categoryService.updateCategory(category);
 		return c;
@@ -53,9 +70,9 @@ public class CategoryController {
 	}
 
 	@DeleteMapping(path = "/category/{catId}")
-	public void removeCategory(@PathVariable("catId") int catId) {
+	public ResponseEntity<String> removeCategory(@PathVariable("catId") int catId) throws CategoryNotFoundException {
 		
-		categoryService.removeCategory(catId);
+		return categoryService.removeCategory(catId);
 
 	}
 
@@ -63,16 +80,7 @@ public class CategoryController {
 	public Category getCategoryById(@PathVariable("catId") int catId) throws CategoryNotFoundException {
 	
 		Category category = categoryService.getCategoryById(catId);
-		// Throw user defined exception
-		if (category == null) {
-			CategoryNotFoundException categoryNotFound = new CategoryNotFoundException("Category ID '"+ catId +"' Not Found!");
-			throw categoryNotFound;
-		}
-		else
-		{	
-			return category;
-		}
-		
+		return category;
 	}
 
 //if we want all categories using like query	
@@ -89,16 +97,7 @@ public class CategoryController {
 	public Category getCategoryByName(@PathVariable("catName") String catName) throws CategoryNotFoundException {
 		
 		Category category = categoryService.getCategoryByName(catName);
-		// Throw user defined exception
-		if (category == null) {
-			CategoryNotFoundException categoryNotFound = new CategoryNotFoundException("Category Name '"+ catName +"' Not Found!");
-			throw categoryNotFound;
-		}
-		else
-		{	
-			return category;
-		}
-	
+		return category;	
 	}
 
 
@@ -106,14 +105,7 @@ public class CategoryController {
 	public List<Category> getAllCategories() throws CategoryNotFoundException {
 		
 		List<Category> categories = categoryService.getAllCategories();
-		if (categories.isEmpty()) {
-			CategoryNotFoundException categoryNotFound = new CategoryNotFoundException("No Category Found!");
-			throw categoryNotFound;
-		}
-		else
-		{	
-			return categories;
-		}
+		return categories;
 	}
 
 }

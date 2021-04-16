@@ -1,8 +1,8 @@
 package com.cg.ima.entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,20 +32,32 @@ public class Employee {
 	private int empId;
 
 	@Column(name = "employee_name")
+	@Size(min = 5, max = 20, message="Employee name should contains minimum 5 and maximum 20 characters.")
 	private String empName;
 
 	@Column(name = "mobile_number")
+	@Size(min = 10, max = 10, message="Mobile number must be 10 digits.")
+	@Pattern(regexp = "^[6-9]{1}\\d{9}$", message="Mobile number must start from 6, 7, 8, 9.")
 	private String mobileNumber;
 
 	@Column(name = "email")
+	@Email(message = "Email should be valid!")
 	private String email;
 	
 	@Column(name = "location")
+	@NotBlank(message = "Location cannot be empty!")
 	private String location;
+	
+	
+//	String name = null; (@NotNull: false / @NotEmpty: false / @NotBlank: false)
+//	String name = ""; (@NotNull: true / @NotEmpty: false / @NotBlank: false)
+//	String name = " "; (@NotNull: true / @NotEmpty: true / @NotBlank: false)
 
+	
+	//Bi-directional
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "employeeOrder")
-	private List<Order> orders = new ArrayList<Order>();
+	@OneToMany(fetch = FetchType.EAGER,mappedBy = "employeeOrder", cascade = CascadeType.REMOVE)//using
+	private List<Order> orders;
 
 
 	public Employee() {

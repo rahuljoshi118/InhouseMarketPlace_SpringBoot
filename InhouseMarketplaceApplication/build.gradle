@@ -21,14 +21,13 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
 	
-    // https://mvnrepository.com/artifact/javax.validation/validation-api
-    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
-    // https://mvnrepository.com/artifact/org.hibernate/hibernate-validator
-    implementation group: 'org.hibernate', name: 'hibernate-validator', version: '6.0.13.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
        
 	implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.10.4'
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.10.4'
 	implementation group: 'io.springfox', name: 'springfox-data-rest', version:'2.10.4'
+	
+
     
     
 }

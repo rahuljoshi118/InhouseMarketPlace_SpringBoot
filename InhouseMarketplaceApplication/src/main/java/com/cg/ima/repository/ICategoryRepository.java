@@ -13,7 +13,10 @@ import com.cg.ima.entities.Category;
 public interface ICategoryRepository extends JpaRepository<Category, Integer> {
 	
 	@Query("from Category where category_name like %:catName%") // JPQL -> table name=Entity class
-//	List<Category> findByName(@Param("catName") String catName);
-	Optional<Category> findByName(@Param("catName") String catName);
+    Optional<Category> findByName(@Param("catName") String catName);
+	
+	@Query("from Category where category_name like %:catName%") // JPQL -> table name=Entity class
+    Category findBySpecificCategoryName(@Param("catName") String catName);
+
 
 }

@@ -3,7 +3,10 @@ package com.cg.ima.service;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+
 import com.cg.ima.entities.Order;
+import com.cg.ima.exception.OrderNotFoundException;
 
 public interface IOrderService {
 	
@@ -11,12 +14,13 @@ public interface IOrderService {
 	
 	public Order updateOrder(Order order);
 	
-	public void removeOrder(int orderId);
+	public ResponseEntity<String> removeOrder(int orderId);
 	
-	public Order getOrderById(int orderId);
+	public Order getOrderById(int orderId) throws OrderNotFoundException;
 	
-	public List<Order> getAllOrdersByDate(LocalDate orderDate);
+	public List<Order> getAllOrdersByDate(LocalDate orderDate) throws OrderNotFoundException;
 	
-	public List<Order> getAllOrders();
+//	public List<Order> getAllOrders();
+	public List<Order> getAllOrdersByEmployeeId(int empId) throws OrderNotFoundException;
 
 }

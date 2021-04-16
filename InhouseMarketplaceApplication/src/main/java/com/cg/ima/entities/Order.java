@@ -1,7 +1,6 @@
 package com.cg.ima.entities;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -15,8 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="orders")
@@ -32,15 +29,16 @@ public class Order {
 	@Column(name = "order_date")
 	private LocalDate orderDate;
 
+	
 	@ManyToOne
 	@JoinColumn(name="employee_id")
 	private Employee employeeOrder;
 	
 	
-	@JsonIgnore
+	
 	@ManyToMany
 	@JoinTable(name = "resource_order", joinColumns = { @JoinColumn(name = "order_id") }, inverseJoinColumns = { @JoinColumn(name = "resource_id") })
-	List<Resource> resources=new ArrayList<>();
+	private List<Resource> resources;
 
 
 	public Order() {
