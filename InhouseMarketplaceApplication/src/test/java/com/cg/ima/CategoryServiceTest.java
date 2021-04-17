@@ -81,7 +81,6 @@ public class CategoryServiceTest {
 		cat.setCatId(10);
 		cat.setCatName("Clothing");
 		
-		
 		Mockito.when(categoryRepository.findById(10)).thenReturn(Optional.of(cat));
 		Category actualcat = categoryService.getCategoryById(10);
 		assertEquals(10,actualcat.getCatId());
