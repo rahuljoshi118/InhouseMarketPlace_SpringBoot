@@ -31,18 +31,19 @@ public class Resource {
 	private int resId;
 
 	@Column(name = "resource_title")
-	@NotBlank(message="Resource title should not be blank!")
+	@NotBlank(message="Resource title should not be blank.")
 	private String resTitle;
 	
 	@Column(name = "resource_description")
 	private String resDescription;
 
 	@Column(name = "resource_price")
-	@Digits(integer=6, fraction=2)
+	@Digits(integer=6, fraction=2, message = "invalid price.")
 	private double resPrice;
 
 	@Column(name = "resource_date")
 	private LocalDate resDate;
+
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id")

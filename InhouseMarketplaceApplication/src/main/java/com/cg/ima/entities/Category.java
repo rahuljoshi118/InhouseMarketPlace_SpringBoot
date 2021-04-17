@@ -22,8 +22,10 @@ public class Category {
 	private int catId;
 
 	@Column(name = "category_name")
-	@NotBlank(message="Category name should not be blank!")
+	@NotBlank(message="Category name should not be blank.")
 	private String catName;
+
+
 
 	public Category() {
 		super();

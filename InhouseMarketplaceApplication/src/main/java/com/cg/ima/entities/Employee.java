@@ -19,6 +19,8 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
+
 @Entity
 @Table(name = "employee")
 public class Employee {
@@ -39,11 +41,11 @@ public class Employee {
 	private String mobileNumber;
 
 	@Column(name = "email")
-	@Email(message = "Email should be valid!")
+	@Email(message = "Email should be valid.")
 	private String email;
 	
 	@Column(name = "location")
-	@NotBlank(message = "Location cannot be empty!")
+	@NotBlank(message = "Location cannot be empty.")
 	private String location;
 	
 	
