@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cg.ima.entities.Category;
 import com.cg.ima.exception.CategoryExistsException;
 import com.cg.ima.exception.CategoryNotFoundException;
+import com.cg.ima.exception.InvalidInputException;
 import com.cg.ima.service.CategoryService;
 
 @RestController
@@ -28,6 +30,8 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 
+	
+	
 // if we want to post(insert) multiple categories	
 //		@PostMapping(path = "/category")
 //		public List<Category> addCategory(@RequestBody List<Category> categories) {
@@ -42,11 +46,15 @@ public class CategoryController {
 
 // if we want to post(insert) a single category
 	@PostMapping(path = "/category")
-	public Category addCategory(@Valid @RequestBody Category category, BindingResult bindingResult) throws Exception, CategoryExistsException {
+	public Category addCategory(@Valid @RequestBody Category category, BindingResult bindingResult) throws InvalidInputException, CategoryExistsException {
 	
 		if (bindingResult.hasErrors()) 
 		{
-			throw new Exception("Category details are not valid");
+			 List<FieldError> errors = bindingResult.getFieldErrors();
+			 for (FieldError error : errors ) 
+			 {
+				 throw new InvalidInputException(error.getObjectName() + " - " + error.getDefaultMessage());
+			 }
 		}
 		
 		Category c = categoryService.addCategory(category);		
@@ -55,11 +63,15 @@ public class CategoryController {
 	}
 	
 	@PutMapping(path = "/category")
-	public Category updateCategory(@Valid @RequestBody Category category, BindingResult bindingResult) throws Exception {
+	public Category updateCategory(@Valid @RequestBody Category category, BindingResult bindingResult) throws InvalidInputException {
 		
 		if (bindingResult.hasErrors()) 
 		{
-			throw new Exception("Category details are not valid");
+			 List<FieldError> errors = bindingResult.getFieldErrors();
+			 for (FieldError error : errors ) 
+			 {
+				 throw new InvalidInputException(error.getObjectName() + " - " + error.getDefaultMessage());
+			 }
 		}
 		
 		Category c = categoryService.updateCategory(category);

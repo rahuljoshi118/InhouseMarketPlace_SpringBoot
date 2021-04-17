@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.ima.entities.Resource;
+import com.cg.ima.exception.InvalidInputException;
 import com.cg.ima.exception.ResourceNotFoundException;
 import com.cg.ima.service.ResourceService;
 
@@ -27,6 +29,7 @@ public class ResourceController {
 	@Autowired
 	private ResourceService resourceService;
 
+	
 // if we want to post(insert) multiple resources	
 //	@PostMapping(path = "/resource")
 //	public List<Resource> addResource(@RequestBody List<Resource> resources) {
@@ -41,11 +44,15 @@ public class ResourceController {
 
 // if we want to post(insert) a single resource
 	@PostMapping(path = "/resource")
-	public Resource addResource(@Valid @RequestBody Resource res, BindingResult bindingResult) throws Exception {
+	public Resource addResource(@Valid @RequestBody Resource res, BindingResult bindingResult) throws InvalidInputException {
 	
 		if (bindingResult.hasErrors()) 
 		{
-			throw new Exception("Resource details are not valid");
+			 List<FieldError> errors = bindingResult.getFieldErrors();
+			 for (FieldError error : errors ) 
+			 {
+				 throw new InvalidInputException(error.getObjectName() + " - " + error.getDefaultMessage());
+			 }
 		}
 		
 		Resource resource = resourceService.addResource(res);		
@@ -54,11 +61,15 @@ public class ResourceController {
 	}
 	
 	@PutMapping(path = "/resource")
-	public Resource updateResource(@Valid @RequestBody Resource res, BindingResult bindingResult) throws Exception {
+	public Resource updateResource(@Valid @RequestBody Resource res, BindingResult bindingResult) throws InvalidInputException {
 		
 		if (bindingResult.hasErrors()) 
 		{
-			throw new Exception("Resource details are not valid");
+			 List<FieldError> errors = bindingResult.getFieldErrors();
+			 for (FieldError error : errors ) 
+			 {
+				 throw new InvalidInputException(error.getObjectName() + " - " + error.getDefaultMessage());
+			 }
 		}
 		
 		Resource resource = resourceService.updateResource(res);

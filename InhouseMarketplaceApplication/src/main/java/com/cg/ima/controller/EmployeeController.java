@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.cg.ima.entities.Employee;
 import com.cg.ima.entities.Order;
 import com.cg.ima.exception.EmployeeExistsException;
 import com.cg.ima.exception.EmployeeNotFoundException;
+import com.cg.ima.exception.InvalidInputException;
 import com.cg.ima.exception.OrderNotFoundException;
 import com.cg.ima.service.EmployeeService;
 import com.cg.ima.service.OrderService;
@@ -36,6 +38,7 @@ public class EmployeeController {
 	@Autowired
 	private OrderService orderService;
 
+	
 // if we want to post(insert) multiple employees	
 //	@PostMapping(path = "/employee")
 //	public List<Employee> addEmployee(@Valid @RequestBody List<Employee> employees) {
@@ -50,11 +53,15 @@ public class EmployeeController {
 
 // if we want to post(insert) a single employee
 	@PostMapping(path = "/employee")
-	public Employee addEmployee(@Valid @RequestBody Employee emp, BindingResult bindingResult) throws Exception, EmployeeExistsException {
+	public Employee addEmployee(@Valid @RequestBody Employee emp, BindingResult bindingResult) throws InvalidInputException, EmployeeExistsException {
 	
 		if (bindingResult.hasErrors()) 
 		{
-			throw new Exception("Employee details are not valid");
+			 List<FieldError> errors = bindingResult.getFieldErrors();
+			 for (FieldError error : errors ) 
+			 {
+				 throw new InvalidInputException(error.getObjectName() + " - " + error.getDefaultMessage());
+			 }
 		}
 		
 		Employee employee = employeeService.addEmployee(emp);
@@ -64,11 +71,15 @@ public class EmployeeController {
 
 	
 	@PutMapping(path = "/employee")
-	public Employee updateEmployee(@Valid @RequestBody Employee emp, BindingResult bindingResult) throws Exception {
+	public Employee updateEmployee(@Valid @RequestBody Employee emp, BindingResult bindingResult) throws InvalidInputException {
 		
 		if (bindingResult.hasErrors()) 
 		{
-			throw new Exception("Employee details are not valid");
+			 List<FieldError> errors = bindingResult.getFieldErrors();
+			 for (FieldError error : errors ) 
+			 {
+				 throw new InvalidInputException(error.getObjectName() + " - " + error.getDefaultMessage());
+			 }
 		}
 		
 		Employee employee = employeeService.updateEmployee(emp);
