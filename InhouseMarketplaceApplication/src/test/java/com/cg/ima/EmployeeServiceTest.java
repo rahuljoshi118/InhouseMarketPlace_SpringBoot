@@ -24,16 +24,21 @@ import com.cg.ima.service.EmployeeService;
 
 
 
-@ExtendWith(MockitoExtension.class)//Junit 5
+@ExtendWith(MockitoExtension.class)				//to use JUnit extensions from Junit 5
 public class EmployeeServiceTest {
 
-	@Mock
+	@Mock										//invoke methods of the class that has external communication
 	IEmployeeRepository employeeRepository;
 	
 	
-	@InjectMocks
+	@InjectMocks								//creates an instance of the class and injects the mocks that are created with the @Mock 
 	EmployeeService employeeService;
 	
+	
+	
+	/*
+		testAddEmployee() is used to test whether the employee details are added successfully. 
+	*/
 	
 	@Test
 	public void testAddEmployee() throws EmployeeExistsException
@@ -47,8 +52,14 @@ public class EmployeeServiceTest {
 		
 		
 		Mockito.when(employeeRepository.save(emp)).thenReturn(emp);
-		assertEquals(emp, employeeService.addEmployee(emp));
+		assertEquals(emp, employeeService.addEmployee(emp)); //check the expected result with actual result.
 	}
+	
+	
+	
+	/*
+		testUpdateEmployee() is used to test whether the employee detail is updated successfully. 
+	*/
 	
 	@Test
 	public void testUpdateEmployee()
@@ -68,6 +79,12 @@ public class EmployeeServiceTest {
 		
 	}
 	
+	
+	
+	/*
+		testDeleteCategory() is used to test whether the employee details are deleted successfully. 
+	*/
+	
 	@Test
 	public void testDeleteEmployee()
 	{
@@ -84,6 +101,11 @@ public class EmployeeServiceTest {
 	}
 	
 	
+	
+	/*
+		testGetEmployeeById() is used to test whether the correct employee details are obtained with the respective given employee id.
+	*/
+
 	@Test
 	public void testGetEmployeeById() throws EmployeeNotFoundException
 	{
@@ -99,6 +121,11 @@ public class EmployeeServiceTest {
 		assertEquals(10,actualEmp.getEmpId());
 	}
 
+
+	
+	/*
+		testGetEmployeeByName() is used to test whether the correct employee details are obtained with the respective given employee name.
+	*/
 	
 	@Test
 	public void testGetEmployeeByName() throws EmployeeNotFoundException
@@ -116,6 +143,11 @@ public class EmployeeServiceTest {
 	}
 	
 
+	
+	/*
+		testGetAllEmployees() is used to test whether the correct error message is shown if no employee details is provided.
+	*/
+	
 	@Test
 	public void testGetAllEmployees()
 	{

@@ -24,16 +24,21 @@ import com.cg.ima.service.OrderService;
 
 
 
-@ExtendWith(MockitoExtension.class)//Junit 5
+@ExtendWith(MockitoExtension.class)			//to use JUnit extensions from Junit 5
 public class OrderServiceTest {
 
-	@Mock
+	@Mock									//invoke methods of the class that has external communication
 	IOrderRepository orderRepository;
 	
 	
-	@InjectMocks
+	@InjectMocks							//creates an instance of the class and injects the mocks that are created with the @Mock 
 	OrderService orderService;
 	
+	
+	
+	/*
+		testAddOrder() is used to test whether the order details is added successfully. 
+	*/
 	
 	@Test
 	public void testAddOrder()
@@ -45,8 +50,14 @@ public class OrderServiceTest {
 		order.setOrderDate(orderDate);
 		
 		Mockito.when(orderRepository.save(order)).thenReturn(order);
-		assertEquals(order, orderService.addOrder(order));
+		assertEquals(order, orderService.addOrder(order)); //check the expected result with actual result.
 	}
+	
+	
+	
+	/*
+		testUpdateOrder() is used to test whether the order detail is updated successfully. 
+	*/
 	
 	@Test
 	public void testUpdateOrder()
@@ -64,6 +75,12 @@ public class OrderServiceTest {
 		
 	}
 	
+	
+	
+	/*
+		testDeleteOrder() is used to test whether the order details are deleted successfully. 
+	*/
+	
 	@Test
 	public void testDeleteOrder()
 	{
@@ -79,6 +96,11 @@ public class OrderServiceTest {
 	}
 	
 	
+	
+	/*
+		testGetOrderById() is used to test whether the correct order details are obtained with the respective given order id.
+	*/
+	
 	@Test
 	public void testGetOrderById() throws OrderNotFoundException
 	{
@@ -93,6 +115,11 @@ public class OrderServiceTest {
 		assertEquals(10,actualorder.getOrderId());
 	}
 
+	
+	
+	/*
+		testGetOrderByDate() is used to test whether the correct order details are obtained with the respective given order date.
+	*/
 	
 	@Test
 	public void testGetOrderByDate() throws OrderNotFoundException
@@ -110,6 +137,11 @@ public class OrderServiceTest {
 		assertEquals(orders, orderService.getAllOrdersByDate((orders.get(0).getOrderDate())));
 	}
 	
+
+	
+	/*
+		testGetAllEmployees() is used to test whether the correct error message is shown if no order details is provided.
+	*/
 
 	@Test
 	public void testGetAllOrdersByEmployeeId()

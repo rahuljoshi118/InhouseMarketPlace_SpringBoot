@@ -25,16 +25,21 @@ import com.cg.ima.service.ResourceService;
 
 
 
-@ExtendWith(MockitoExtension.class)//Junit 5
+@ExtendWith(MockitoExtension.class)				//to use JUnit extensions from Junit 5
 public class ResourceServiceTest {
 
-	@Mock
+	@Mock										//invoke methods of the class that has external communication
 	IResourceRepository resourceRepository;
 	
 	
-	@InjectMocks
+	@InjectMocks								//creates an instance of the class and injects the mocks that are created with the @Mock 
 	ResourceService resourceService;
 	
+	
+	
+	/*
+		testAddResource() is used to test whether the resource details is added successfully. 
+	*/
 	
 	@Test
 	public void testAddResource()
@@ -54,8 +59,13 @@ public class ResourceServiceTest {
 		res.setResPrice(1000);
 		
 		Mockito.when(resourceRepository.save(res)).thenReturn(res);
-		assertEquals(res, resourceService.addResource(res));
+		assertEquals(res, resourceService.addResource(res)); //check the expected result with actual result.
 	}
+	
+	
+	/*
+		testUpdateResource() is used to test whether the resource detail is updated successfully. 
+	*/
 	
 	@Test
 	public void testUpdateResource()
@@ -81,6 +91,12 @@ public class ResourceServiceTest {
 		
 	}
 	
+	
+	
+	/*
+		testDeleteResource() is used to test whether the resource details are deleted successfully. 
+	*/
+	
 	@Test
 	public void testDeleteResource()
 	{
@@ -104,6 +120,11 @@ public class ResourceServiceTest {
 	    assertFalse(resourceRepository.existsById(res.getResId()));
 	}
 	
+	
+	
+	/*
+		testGetResourceById() is used to test whether the correct resource details are obtained with the respective given resource id.
+	*/
 	
 	@Test
 	public void testGetResourceById() throws ResourceNotFoundException
@@ -129,7 +150,10 @@ public class ResourceServiceTest {
 
 	
 	
-
+	/*
+		testGetEmployeeByName() is used to test whether the correct resource details are obtained with the respective given categoryId.
+	*/
+	
 	@Test
 	public void testGetAllResourcesByCategory() throws ResourceNotFoundException
 	{
@@ -156,6 +180,10 @@ public class ResourceServiceTest {
 	}
 	
 	
+	/*
+		testGetAllEmployees() is used to test whether the correct error message is shown if no resource details is provided.
+	*/
+
 	@Test
 	public void testGetAllResources()
 	{
