@@ -24,7 +24,7 @@ import com.cg.ima.service.EmployeeService;
 
 
 
-@ExtendWith(MockitoExtension.class)				//to use JUnit extensions from Junit 5
+@ExtendWith(MockitoExtension.class)				
 public class EmployeeServiceTest {
 
 	@Mock										//invoke methods of the class that has external communication
@@ -52,7 +52,7 @@ public class EmployeeServiceTest {
 		
 		
 		Mockito.when(employeeRepository.save(emp)).thenReturn(emp);
-		assertEquals(emp, employeeService.addEmployee(emp)); //check the expected result with actual result.
+		assertEquals(emp, employeeService.addEmployee(emp)); 
 	}
 	
 	

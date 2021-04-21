@@ -25,7 +25,7 @@ import com.cg.ima.service.ResourceService;
 
 
 
-@ExtendWith(MockitoExtension.class)				//to use JUnit extensions from Junit 5
+@ExtendWith(MockitoExtension.class)
 public class ResourceServiceTest {
 
 	@Mock										//invoke methods of the class that has external communication
@@ -44,7 +44,6 @@ public class ResourceServiceTest {
 	@Test
 	public void testAddResource()
 	{
-		LocalDate resDate = null;
 		
 		Category cat = new Category();
 		cat.setCatId(10);
@@ -52,14 +51,14 @@ public class ResourceServiceTest {
 		
 		Resource res = new Resource();
 		res.setResId(10);
-		res.setResDate(resDate);
+		res.setResDate(LocalDate.now());
 		res.setCategory(cat);
 		res.setResDescription("100% Cotton");
 		res.setResTitle("Shirt");
 		res.setResPrice(1000);
 		
 		Mockito.when(resourceRepository.save(res)).thenReturn(res);
-		assertEquals(res, resourceService.addResource(res)); //check the expected result with actual result.
+		assertEquals(res, resourceService.addResource(res)); 
 	}
 	
 	
@@ -70,7 +69,7 @@ public class ResourceServiceTest {
 	@Test
 	public void testUpdateResource()
 	{
-		LocalDate resDate = null;
+		
 		
 		Category cat = new Category();
 		cat.setCatId(10);
@@ -78,7 +77,7 @@ public class ResourceServiceTest {
 		
 		Resource res = new Resource();
 		res.setResId(10);
-		res.setResDate(resDate);
+		res.setResDate(LocalDate.now());
 		res.setCategory(cat);
 		res.setResDescription("100% Cotton");
 		res.setResTitle("Shirt");
@@ -100,7 +99,6 @@ public class ResourceServiceTest {
 	@Test
 	public void testDeleteResource()
 	{
-		LocalDate resDate = null;
 		
 		Category cat = new Category();
 		cat.setCatId(10);
@@ -108,7 +106,7 @@ public class ResourceServiceTest {
 		
 		Resource res = new Resource();
 		res.setResId(10);
-		res.setResDate(resDate);
+		res.setResDate(LocalDate.now());
 		res.setCategory(cat);
 		res.setResDescription("100% Cotton");
 		res.setResTitle("Shirt");
@@ -129,7 +127,7 @@ public class ResourceServiceTest {
 	@Test
 	public void testGetResourceById() throws ResourceNotFoundException
 	{
-		LocalDate resDate = null;
+		
 		
 		Category cat = new Category();
 		cat.setCatId(10);
@@ -137,7 +135,7 @@ public class ResourceServiceTest {
 		
 		Resource res = new Resource();
 		res.setResId(10);
-		res.setResDate(resDate);
+		res.setResDate(LocalDate.now());
 		res.setCategory(cat);
 		res.setResDescription("100% Cotton");
 		res.setResTitle("Shirt");
@@ -157,7 +155,7 @@ public class ResourceServiceTest {
 	@Test
 	public void testGetAllResourcesByCategory() throws ResourceNotFoundException
 	{
-		LocalDate resDate = null;
+		
 		
 		Category cat = new Category();
 		cat.setCatId(10);
@@ -165,7 +163,7 @@ public class ResourceServiceTest {
 		
 		Resource res = new Resource();
 		res.setResId(10);
-		res.setResDate(resDate);
+		res.setResDate(LocalDate.now());
 		res.setCategory(cat);
 		res.setResDescription("100% Cotton");
 		res.setResTitle("Shirt");

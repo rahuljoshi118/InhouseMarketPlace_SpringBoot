@@ -38,7 +38,7 @@ public class CategoryServiceTest {
 		testAddCategory() is used to test whether the category details is added successfully. 
 	*/
 	
-	@Test				// tells JUnit that the method attached can be run as a test case
+	@Test				
 	public void testAddCategory() throws CategoryExistsException
 	{
 		Category cat = new Category();
@@ -47,7 +47,7 @@ public class CategoryServiceTest {
 		
 
 		Mockito.when(categoryRepository.save(cat)).thenReturn(cat);
-		assertEquals(cat, categoryService.addCategory(cat));  //check the expected result with actual result.
+		assertEquals(cat, categoryService.addCategory(cat)); 
 	}
 	
 	

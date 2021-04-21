@@ -24,7 +24,7 @@ import com.cg.ima.service.OrderService;
 
 
 
-@ExtendWith(MockitoExtension.class)			//to use JUnit extensions from Junit 5
+@ExtendWith(MockitoExtension.class)			
 public class OrderServiceTest {
 
 	@Mock									//invoke methods of the class that has external communication
@@ -50,7 +50,7 @@ public class OrderServiceTest {
 		order.setOrderDate(orderDate);
 		
 		Mockito.when(orderRepository.save(order)).thenReturn(order);
-		assertEquals(order, orderService.addOrder(order)); //check the expected result with actual result.
+		assertEquals(order, orderService.addOrder(order));
 	}
 	
 	
